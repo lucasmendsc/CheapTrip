@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:include src="menuPassageiro.xhtml"/>
+         
+         <c:if test="${loginPassageiro.passageiroLogado == null}">
+            <script>location.href = "loginPassageiro.xhtml";</script>
+            </c:if>
+            
+         <p:growl id="gro" showDetail="true" autoUpdate="true" sticky="true" showSummary="true"/>
+         
+         <h:form>
+            <p:fieldset>
+                <p:panelGrid columns="2" columnClasses="label, values">
+                    <h:outputText value="Nome"/>
+                    <h:outputText value="#{loginPassageiro.passageiroLogado.nome}" />
+                    
+                     <h:outputText value="CPF"/>
+                    <h:outputText value="#{loginPassageiro.passageiroLogado.cpf}"/>
+                    
+                </p:panelGrid>
+                <p:commandButton value="Visualizar" oncomplete="PF('widDialVisualizaPassageiro').show()"/>
+                <p:commandButton value="Alterar dados do passageiro" action="alteraPassageiro.xhtml"/>
+                <p:commandButton icon="fa-trash-o" value="Deletar" oncomplete="PF('widDialDeletaPassageiro').show()"/>
+            </p:fieldset>
+              </h:form>
+             <h:form>
+              <p:dialog id="dialVisualizaPassageiro" visible="false" modal="true" resizable="false" draggable="false"
+                  widgetVar="widDialVisualizaPassageiro" >
+            <p:panelGrid columns="2">
+                <h:outputText value="Código : "/>
+                <h:outputText value="#{loginPassageiro.passageiroLogado.id_passageiro}"/>
+                
+                <h:outputText value="Nome : "/>
+                <h:outputText value="#{loginPassageiro.passageiroLogado.nome}"/>
+                
+                <h:outputText value="CPF : "/>
+                <h:outputText value="#{loginPassageiro.passageiroLogado.cpf}"/>
+                
+                <h:outputText value="Email : "/>
+                <h:outputText value="#{loginPassageiro.passageiroLogado.email}"/>
+                
+                <p:commandButton value="Visualizar Endereço" oncomplete="PF('widDialVisualizaEnderecoPassageiro').show()" 
+                                 update="dialEndereco"/>
+      
+                <p:commandButton value="Voltar" oncomplete="PF('widDialVisualizaPassageiro').hide()"/>
+                
+            </p:panelGrid>
+        </p:dialog>
+            
+            <p:dialog id="dialEndereco" visible="false" modal="true" resizable="false" draggable="false"
+                      widgetVar="widDialVisualizaEnderecoPassageiro">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Estado : "/>
+                    <h:outputText value="#{loginPassageiro.passageiroLogado.local.estado}"/>
+                    
+                    <h:outputText value="Cidade : "/>
+                    <h:outputText value="#{loginPassageiro.passageiroLogado.local.cidade}"/>
+                    
+                    <h:outputText value="CEP : "/>
+                    <h:outputText value="#{loginPassageiro.passageiroLogado.local.cep}"/>
+                    
+                    <p:commandButton value="Voltar para o passageiro" oncomplete="PF('widDialVisualizaEnderecoPassageiro').hide()"/>
+                </p:panelGrid>
+            </p:dialog>
+                 
+                 <p:dialog id="delPassageiro" visible="false" modal="true" resizable="false"
+                     widgetVar="widDialDeletaPassageiro">
+                     <h:outputText value="Você deseja realmente deletar esser perfil?"/>
+                                   <p:commandButton value="Sim" action="#{passageiroController.deletar(loginPassageiro.passageiroLogado)}" oncomplete="PF('widDialDeletaPassageiro').hide()"/>
+                                   <p:commandButton value="Não" oncomplete="PF('widDialDeletaPassageiro').hide()"/>
+                 </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

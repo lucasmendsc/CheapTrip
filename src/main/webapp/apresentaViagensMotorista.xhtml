@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Suas viagens</title>
+    </h:head>
+    <h:body>
+        <ui:include src="menuMotorista.xhtml"/>
+        <p:growl id="gro" sticky="true" showSummary="true" showDetail="true"/>
+
+        <c:if test="${loginMotorista.motoristaLogado == null}">
+            <script>location.href = "loginMotorista.xhtml";</script>
+        </c:if>
+
+        <h:form>
+            <p:dataTable id="tableViagem" var="viagem" value="#{viagemController.recuperarPorMotorista(loginMotorista.motoristaLogado)}" rows="5"
+                         paginator="true" selectionMode="single" selection="#{viagemController.selectedViagem}"
+                         rowKey="#{viagem.id_viagem}">
+
+                <p:column headerText="Motorista">
+                    #{viagem.motorista.nome}
+                </p:column>
+
+                <p:column headerText="Passageiros">
+                    <ui:repeat var="pass" value="#{viagem.passageiros}">
+                        #{pass.nome}<br/>
+                    </ui:repeat>
+                </p:column>
+
+                <p:column headerText="Operações">
+                    <p:commandButton value="Visualizar" oncomplete="PF('widDialVisualizaViagem').show()"/>
+                    <p:commandButton value="Alterar endereço da Viagem" oncomplete="PF('widDialAltera').show()"/>
+                    <p:commandButton value="Deletar viagem" action="#{viagemController.deletar()}"/>
+
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <h:form>
+
+
+            <p:dialog visible="false" id="dialVisualizaViagem" modal="true"
+                      resizable="false" widgetVar="widDialVisualizaViagem">
+                <p:fieldset>
+                    <p:tab>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Nome"/>
+                            <h:outputText value="#{viagemController.selectedViagem.motorista.nome}"/>
+
+                            <h:outputText value="CPF"/>
+                            <h:outputText value="#{viagemController.selectedViagem.motorista.cpf}"/>
+
+                            <h:outputText value="E-mail"/>
+                            <h:outputText value="#{viagemController.selectedViagem.motorista.email}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Visualizar endereço" oncomplete="PF('widDialVisualizaEndereco').show()"/>
+                        <p:commandButton value="Visualizar passageiros" oncomplete="PF('widDialVisualizaPassageiro').show()"/>
+                    </p:tab>
+                </p:fieldset>
+
+            </p:dialog>
+
+            <p:dialog visible="false" id="dialVisualizaEndereco" modal="true"
+                      resizable="false" widgetVar="widDialVisualizaEndereco">
+                <p:fieldset>
+                    <p:tab>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Estado"/>
+                            <h:outputText value="#{viagemController.selectedViagem.motorista.local.estado}"/>
+
+                            <h:outputText value="Cidade"/>
+                            <h:outputText value="#{viagemController.selectedViagem.motorista.local.cidade}"/>
+
+                            <h:outputText value="CEP"/>
+                            <h:outputText value="#{viagemController.selectedViagem.motorista.local.cep}"/>
+
+
+                        </p:panelGrid>
+                    </p:tab>
+                </p:fieldset>
+
+            </p:dialog>
+
+            <p:dialog visible="false" id="dialVisualizaPassageiro" modal="true"
+                      resizable="false" widgetVar="widDialVisualizaPassageiro">
+                <p:dataTable id="tablePass" rows="5" var="pass" value="#{viagemController.selectedViagem.passageiros}"
+                             rowKey="#{pass.id_passageiro}" paginator="true">
+                    <p:column headerText="Nome">
+                        #{pass.nome}
+                    </p:column>
+                    <p:column headerText="CPF">
+                        #{pass.cpf}
+                    </p:column>
+                    <p:column headerText="E-mail">
+                        #{pass.email}
+                    </p:column>
+
+                </p:dataTable>
+                <p:commandButton value="Hide" oncomplete="PF('widDialVisualizaPassageiro').hide()"/>
+            </p:dialog>
+
+            <p:commandButton value="Voltar" action="index.xhtml"/>
+
+            <p:dialog id="dialAlteraViagem" visible="false" widgetVar="widDialAltera" onShow="widDialVisualizaViagem">
+                <h:form>
+                    <p:fieldset>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Estado :"/>
+                            <p:inputText value="#{loginMotorista.motoristaLogado.local.cidade}" required="true"/>
+
+                            <h:outputText value="Cidade :"/>
+                            <p:inputText value="#{loginMotorista.motoristaLogado.local.cidade}" required="true"/>
+
+                            <h:outputText value="CEP :"/>
+                            <p:inputText value="#{loginMotorista.motoristaLogado.local.cep}"/>
+                        </p:panelGrid>
+
+                        <p:commandButton value="Alterar" action="#{localController.alterarLocalMotorista(viagemController.selectedViagem.motorista.local)}"/>
+                    </p:fieldset>
+                </h:form>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

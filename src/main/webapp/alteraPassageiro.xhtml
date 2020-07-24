@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Alterar passageiro</title>
+    </h:head>
+    <h:body>
+            <ui:include src="menuPassageiro.xhtml"/>
+         
+         <c:if test="${loginPassageiro.passageiroLogado == null}">
+            <script>location.href = "loginPassageiro.xhtml";</script>
+            </c:if>
+            
+         <p:growl id="gro" showDetail="true" autoUpdate="true" sticky="true" showSummary="true"/>
+        <h:form id="alteraPassageiro">
+            <p:fieldset>
+                <p:panelGrid columns="2">
+                    <h:outputText value="Nome: "/>
+                    <p:inputText value="#{loginPassageiro.passageiroLogado.nome}" required="true"/>
+                    
+                    <h:outputText value="CPF: "/>
+                    <p:inputText value="#{loginPassageiro.passageiroLogado.cpf}" required="true"/>
+                    
+                    <h:outputText value="E-mail: "/>
+                    <p:inputText value="#{loginPassageiro.passageiroLogado.email}"/>
+                    
+                    <h:outputText value="Login: "/>
+                    <p:inputText value="#{loginPassageiro.passageiroLogado.login}" required="true"/>
+                    
+                    <h:outputText value="Senha: "/>
+                    <p:inputText value="#{loginPassageiro.passageiroLogado.senha}" required="true"/>
+                </p:panelGrid>
+                <p:commandButton value="Alterar" action="#{passageiroController.alterar(loginPassageiro.passageiroLogado)}"/>
+                
+                <p:commandButton value="Alterar endereço" action="alteraLocalPassageiro.xhtml"/>
+                
+            </p:fieldset>
+
+        </h:form>
+    </h:body>
+</html>
+

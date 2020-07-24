@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title></title>
+    </h:head>
+    <h:body>
+          <ui:include src="menuMotorista.xhtml"/>
+         
+          <p:growl id="gro" life="4000" showDetail="true" 
+                     showSummary="true"/>
+        <h:form>
+            <p:dialog id="dialCarro" visible="true" resizable="false" modal="false"
+                      widgetVar="widDialCarro" header="Cadastro do carro">
+                <p:tab>
+                    <p:panelGrid columns="3" columnClasses="label, values">
+                        <h:outputText value="Marca *"/>
+                        <p:inputText  id="txtMarca" value="#{carroController.cadCarro.marca}" required="true"
+                                     requiredMessage="Informe a marca do veiculo" />
+                        <p:messages for="txtMarca"/>
+                        
+                        <h:outputText value="Modelo *"/>
+                        <p:inputText id="txtModelo" value="#{carroController.cadCarro.modelo}"
+                                     requiredMessage="Informe o modelo do veículo"/>
+                        <p:message for="txtModelo"/>
+                        
+                        <h:outputText value="Placa *"/>
+                        <p:inputText id="txtPlaca" value="#{carroController.cadCarro.placa}" required="true"
+                                     requiredMessage="Informe a placa do veículo"/>
+                        <p:messages for="txtPlaca"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Next" action="#{carroController.cadastrar()}"
+                                     oncomplete="PF('widDialLocal').show()" onclick="PF('widDialCarro').hide()"/>
+                </p:tab> 
+            </p:dialog>
+        </h:form>
+        <h:form>
+               <p:dialog id="dialLocal" visible="false" resizable="false" modal="false"
+                         widgetVar="widDialLocal" header="Cadastro do endereço">
+                <p:tab>
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="Estado *" />
+                        <p:inputText value="#{localController.cadLocal.estado}"
+                                     required="true" requiredMessage="Digite o estado em que voce reside"/>
+
+                        <h:outputText value="Cidade *"/>
+                        <p:inputText value="#{localController.cadLocal.cidade}"
+                                     required="true" requiredMessage="Digite a cidade em que voce reside"/>
+
+                        <h:outputText value="CEP *"/>
+                        <p:inputText value="#{localController.cadLocal.cep}"/>
+                        <p:messages/>
+                    </p:panelGrid>
+                    <p:commandButton value="Back" oncomplete="PF('widDialLocal').hide()" onclick="PF('widDialCarro').show()"/>
+                    <p:commandButton value="Next" action="#{localController.cadastrar()}"
+                                     oncomplete="PF('widDialMotorista').show()" onclick="PF('widDialLocal').hide()"/>
+                </p:tab> 
+            </p:dialog>
+        </h:form>
+         
+        <h:form>
+            <p:dialog id="dialMotorista" visible="false" resizable="false" modal="true" widgetVar="widDialMotorista"
+                      header="Cadastro do motorista">
+                <p:tab>
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Nome *"/>
+                        <p:inputText id="txtNomeMoto" value="#{motoristaController.cadMotorista.nome}" required="true"/>
+                        
+                        <h:outputText value="CPF *"/>
+                        <p:inputText value="#{motoristaController.cadMotorista.cpf}" required="true"/>
+
+                        <h:outputText value="E-mail *"/>
+                        <p:inputText value="#{motoristaController.cadMotorista.email}"/>
+
+                        <h:outputText value="Login *"/>
+                        <p:inputText value="#{motoristaController.cadMotorista.login}" required="true"/>
+                        
+                         <h:outputText value="Senha *"/>
+                         <p:password value="#{motoristaController.cadMotorista.senha}" required="true"/>
+                        
+
+                    </p:panelGrid>
+                    <p:commandButton value="Back" oncomplete="PF('widDialMotorista').hide()" onclick="PF('widDialLocal').show()"/>
+                    <p:commandButton value="Cadastrar" action="#{motoristaController.cadastrar(localController.cadLocal,carroController.cadCarro)}"/>
+                </p:tab>
+            </p:dialog>
+
+        </h:form>
+
+
+    </h:body>
+</html>
+

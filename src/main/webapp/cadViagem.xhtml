@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Viagem</title>
+    </h:head>
+    <h:body>
+          <ui:include src="menuMotorista.xhtml"/>
+         <c:if test="${loginMotorista.motoristaLogado == null}">
+            <script>location.href = "loginMotorista.xhtml";</script>
+        </c:if>
+         
+        <p:growl id="gro" sticky="true" showDetail="true" showSummary="true"/>
+        <h:form>
+            <p:fieldset>
+                <p:panelGrid columns="2" columnClasses="label, value">
+                    <h:outputText value="Nome"/>
+                    <h:outputText value="#{loginMotorista.motoristaLogado.nome}"/>
+                </p:panelGrid>
+                <p:commandButton value="Adicionar destino" oncomplete="PF('widDialLocal').show()"/>
+                
+            </p:fieldset>
+        </h:form>
+        
+        <h:form>
+               <p:dialog id="dialLocal" visible="false" resizable="false" modal="false"
+                      widgetVar="widDialLocal">
+                <p:tab>
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Estado *" />
+                        <p:inputText value="#{localController.cadLocal.estado}"/>
+
+                        <h:outputText value="Cidade *"/>
+                        <p:inputText value="#{localController.cadLocal.cidade}"/>
+
+                        <h:outputText value="CEP *"/>
+                        <p:inputText value="#{localController.cadLocal.cep}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Cadastrar viagem" action="#{viagemController.cadastrar(localController.cadLocal)}" actionListener="#{localController.cadastrar()}"
+                                     onclick="PF('widDialLocal').hide()"/>
+                </p:tab> 
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

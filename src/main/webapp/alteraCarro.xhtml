@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+         <ui:include src="menuMotorista.xhtml"/>
+         <c:if test="${loginMotorista.motoristaLogado == null}">
+            <script>location.href = "loginMotorista.xhtml";</script>
+        </c:if>
+         
+        <p:growl id="gro" sticky="true" showDetail="true" showSummary="true"/>
+        
+        <h:form>
+            <p:fieldset>
+                <p:panelGrid>
+                    <h:outputText value="Marca"/>
+                    <p:inputText value="#{loginMotorista.motoristaLogado.carro.marca}"/>
+                    
+                    <h:outputText value="Modelo"/>
+                    <p:inputText value="#{loginMotorista.motoristaLogado.carro.modelo}"/>
+                    
+                    <h:outputText value="Placa"/>
+                    <p:inputText value="#{loginMotorista.motoristaLogado.carro.placa}"/>
+                    
+                </p:panelGrid>
+                <p:commandButton value="Alterar" action="#{carroController.alterar(loginMotorista.motoristaLogado.carro)}"/>
+                <p:commandButton value="Voltar" action="visualizaMotorista.xhtml"/>
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>
+
